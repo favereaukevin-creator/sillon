@@ -151,7 +151,7 @@ index = f'''  <main>
   'LMNP, location nue, Denormandie, Jeanbrun : le même projet chiffré sous chaque régime, avec l’effort d’épargne, l’impôt et le patrimoine constitué, année après année.',
   ['Micro ou réel, déficit foncier et amortissement gérés selon les règles 2026',
    'Une SCPI à crédit en complément, intérêts déduits des revenus fonciers',
-   'Les paliers qui comptent : fin du crédit, fin de l’engagement, horizon choisi'], V_IMMO)}
+   'Une vue « Présenter au client » : une carte par dispositif, avec la mensualité, la réduction d’impôt et l’effort d’épargne — sans le détail des calculs'], V_IMMO)}
 {alterne('Budget', 'Le budget du client, sans rien ressaisir.',
   'Importez ses relevés bancaires : Sillon lit le fichier, classe les dépenses et fait ressortir ce qui reste chaque mois pour épargner.',
   ['Fichiers CSV ou Excel, quelle que soit la banque',
@@ -168,14 +168,14 @@ index = f'''  <main>
    'Fin d’un engagement Pinel ou Jeanbrun, fin d’un crédit, livret au plafond',
    'Majorité des enfants, abattement reconstitué 15 ans après une donation'], V_CAL)}
 {alterne('Tableau de bord et prospection', 'Votre cabinet, pas seulement vos rendez-vous.',
-  'Un tableau de bord dit qui a été vu cette année et qui relancer ; la prospection repère au BODACC les sociétés qui viennent de se créer dans votre département ; l’import reprend votre base clients existante.',
+  'Un tableau de bord dit qui a été vu cette année et qui relancer ; la prospection repère au BODACC les sociétés qui viennent de se créer dans votre département ; l’import reprend votre base clients existante et vos synthèses patrimoniales.',
   ['Clients vus depuis le 1er janvier, clients à relancer, fiches à compléter',
    'Créations de sociétés et modifications de capital, dossier prospect en un clic',
-   'Import CSV ou Excel : un dossier et une fiche par client, après un aperçu'], V_CABINET)}
+   'Import CSV ou Excel, ou synthèses patrimoniales Word : un dossier complet par client, après un aperçu'], V_CABINET)}
 {alterne('Synthèse et documents', 'Un dossier par client, une synthèse en un clic.',
   'Chaque client a son dossier : les simulations y sont enregistrées et se retrouvent au rendez-vous suivant. La synthèse réunit tout, prête à imprimer ou à enregistrer en PDF.',
   ['Plusieurs dossiers clients, retrouvés instantanément',
-   'Export PDF et présentation PowerPoint prête à projeter',
+   'Export PDF et présentation PowerPoint prête à projeter, une diapositive par dispositif fiscal',
    'Sauvegarde et transfert d’un dossier en un fichier'], V_DOSSIERS)}
       </div>
     </section>
@@ -267,7 +267,7 @@ index = f'''  <main>
             <ul class="puces">
               <li>Les cinq outils de simulation et la synthèse</li>
               <li>Fiche client, calendrier fiscal et tableau de bord</li>
-              <li>Prospection BODACC et import de votre base clients</li>
+              <li>Prospection BODACC, import de votre base clients et de vos synthèses patrimoniales</li>
               <li>Dossiers clients illimités</li>
               <li>Application Mac et Windows, et version navigateur</li>
               <li>Mises à jour automatiques</li>
@@ -289,7 +289,7 @@ index = f'''  <main>
           <details><summary>Faut-il installer quelque chose ?</summary><p>Non, ce n’est pas obligatoire : Sillon fonctionne aussi dans un simple navigateur. Une application Mac et Windows est disponible pour ceux qui préfèrent ; à la première ouverture, le système peut afficher un avertissement de sécurité, et la procédure pour le passer est fournie avec le lien.</p></details>
           <details><summary>Où sont stockées les données de mes clients ?</summary><p>Uniquement sur votre appareil. Sillon n’envoie aucune donnée client sur internet : la seule requête en ligne est celle de la prospection, qui interroge le BODACC avec un département et une période. Pensez à exporter vos dossiers pour les sauvegarder, ou pour les retrouver sur un autre ordinateur.</p></details>
           <details><summary>Les règles fiscales sont-elles à jour ?</summary><p>Les barèmes, plafonds et dispositifs sont ceux de 2026, vérifiés sur le BOFiP et Légifrance. Quand une règle change, l’outil est corrigé et la mise à jour arrive automatiquement.</p></details>
-          <details><summary>Puis-je montrer les simulations à mes clients ?</summary><p>Oui, c’est leur raison d’être, et une version client est prévue pour le PDF. Les simulations restent des projections fondées sur des hypothèses : elles appuient votre conseil, elles ne le remplacent pas.</p></details>
+          <details><summary>Puis-je montrer les simulations à mes clients ?</summary><p>Oui, c’est leur raison d’être. L’épargne immobilier a une vue « Présenter au client » qui ne garde que l’essentiel — mensualité, réduction d’impôt, effort d’épargne — et le PowerPoint reprend chaque dispositif sur sa propre diapositive. Les simulations restent des projections fondées sur des hypothèses : elles appuient votre conseil, elles ne le remplacent pas.</p></details>
         </div>
       </div>
     </section>
