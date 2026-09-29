@@ -10,6 +10,7 @@ I = {
  'test': trait('<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>'),
  'cadenas': trait('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
  'maison': trait('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>'),
+ 'calendrier': trait('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M12 14h2M8 17h2"/>'),
  'export': trait('<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/>'),
 }
 SILLONS = '<svg class="sillons" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#0f4c5c" stroke-width="1.2" opacity=".18">' + ''.join(
@@ -87,6 +88,13 @@ V_IMMO = lignes('Même bien, quatre régimes', [('LMNP au réel','212 €/mois',
 V_BUDGET = lignes('Relevé importé · 3 mois', [('Charges fixes','1 420 €',0),('Dépenses courantes','860 €',0),('Dépenses variables','390 €',0),('Capacité d’épargne','+ 530 €/mois',1)], 'Données fictives')
 V_OUTILS = '<div class="v-titre">Les outils</div><div class="v-pastilles"><span>Épargne immobilier</span><span>SCPI</span><span>Budget</span><span>Résidence principale</span><span>Une pierre deux coups</span><span>Synthèse du dossier</span></div>'
 V_DOSSIERS = lignes('Dossiers', [('M. et Mme Martin','3 simulations',0),('Mme Durand','1 simulation',0),('SARL Lefèvre — dirigeant','2 simulations',0),('Synthèse','PDF prêt',1)], 'Données fictives')
+V_CAL = ('<div class="v-titre">Calendrier fiscal · tous les clients</div>'
+  '<div class="v-ligne"><span>Lucas aura 18 ans <small style="color:var(--libelle)">— M. et Mme Martin</small></span><b>1 déc.</b></div>'
+  '<div class="v-ligne"><span>Versement PER déductible <small style="color:var(--libelle)">— 4 clients</small></span><b>31 déc.</b></div>'
+  '<div class="v-ligne"><span>Fin de l’engagement Pinel <small style="color:var(--libelle)">— M. Roy</small></span><b>10 janv.</b></div>'
+  '<div class="v-ligne"><span>8 ans de l’assurance-vie <small style="color:var(--libelle)">— Mme Durand</small></span><b>15 janv.</b></div>'
+  '<div class="v-ligne"><span>70 ans : régime de l’assurance-vie <small style="color:var(--libelle)">— M. Martin</small></span><b>12 mars</b></div>'
+  '<p class="m-legende" style="margin:10px 0 0">Données fictives</p>')
 V_MAIL = ('<div class="v-mail"><div class="v-mail-tete">Alerte veille<small>Paru hier au BOFiP · 1 actualité</small></div>'
   '<div class="v-mail-corps"><div><span class="tag">À traiter</span><br><b>Dons familiaux : la doctrine précise la condition d’âge</b></div>'
   '<div style="color:var(--doux)">Ce qui change, qui est concerné, que revoir chez vos clients — et le texte officiel.</div>'
@@ -153,6 +161,11 @@ index = f'''  <main>
   ['Capital, revenus et scénario de réinvestissement côte à côte',
    'Coût du logement, surcoût face au loyer et effort d’épargne tenus séparés',
    'PER, assurance-vie ou SCPI en complément, chacun avec sa vraie mécanique'], V_OUTILS)}
+{alterne('Fiche client et calendrier fiscal', 'Chaque client sur une page, et ses échéances qui viennent à vous.',
+  'La fiche réunit l’identité, l’arbre familial — familles recomposées comprises —, les contrats, les biens et les donations, avec le patrimoine net. Le calendrier fiscal en déduit les échéances de tous vos clients.',
+  ['8 ans d’une assurance-vie, 70 et 80 ans, versement PER avant le 31 décembre',
+   'Fin d’un engagement Pinel ou Jeanbrun, fin d’un crédit, livret au plafond',
+   'Majorité des enfants, abattement reconstitué 15 ans après une donation'], V_CAL)}
 {alterne('Synthèse et documents', 'Un dossier par client, une synthèse en un clic.',
   'Chaque client a son dossier : les simulations y sont enregistrées et se retrouvent au rendez-vous suivant. La synthèse réunit tout, prête à imprimer ou à enregistrer en PDF.',
   ['Plusieurs dossiers clients, retrouvés instantanément',
@@ -209,7 +222,8 @@ index = f'''  <main>
 {carte('maj', 'Mises à jour automatiques', 'Les nouvelles versions s’installent d’elles-mêmes : tout le réseau travaille sur les mêmes règles.')}
 {carte('bareme', 'Règles 2026 vérifiées', 'Barèmes, plafonds et dispositifs relevés sur le BOFiP et Légifrance, datés et sourcés.')}
 {carte('test', 'Calculs contrôlés', 'Plus de deux cents tests automatiques vérifient les moteurs de calcul à chaque version.')}
-{carte('dossier', 'Dossiers clients', 'Les simulations sont enregistrées par client et se retrouvent au rendez-vous suivant.')}
+{carte('dossier', 'Fiche et arbre familial', 'Identité, famille recomposée, contrats, biens, donations : le client sur une page, patrimoine net compris.')}
+{carte('calendrier', 'Calendrier fiscal', 'Onze échéances surveillées automatiquement pour chaque client, datées et sourcées.')}
 {carte('pdf', 'PDF et version client', 'Une synthèse propre à imprimer, à enregistrer ou à remettre au client.')}
         </div>
       </div>
@@ -246,6 +260,7 @@ index = f'''  <main>
           <div class="acces-droite">
             <ul class="puces">
               <li>Les cinq outils de simulation et la synthèse</li>
+              <li>Fiche client et calendrier fiscal</li>
               <li>Dossiers clients illimités</li>
               <li>Application Mac et Windows, et version navigateur</li>
               <li>Mises à jour automatiques</li>
