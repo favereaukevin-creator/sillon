@@ -1,0 +1,303 @@
+# Génère index.html et mentions-legales.html. Lancer : python3 generer.py
+LOGO = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0f4c5c"/><path d="M7 22c5-3 13-3 18 0M7 17c5-3 13-3 18 0M7 12c5-3 13-3 18 0" fill="none" stroke="#e3b04b" stroke-width="2.4" stroke-linecap="round"/></svg>'
+def trait(d): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
+I = {
+ 'dossier': trait('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'),
+ 'maj': trait('<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>'),
+ 'ecran': trait('<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'),
+ 'pdf': trait('<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>'),
+ 'bareme': trait('<path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/>'),
+ 'test': trait('<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>'),
+ 'cadenas': trait('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
+ 'maison': trait('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>'),
+ 'export': trait('<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/>'),
+}
+SILLONS = '<svg class="sillons" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#0f4c5c" stroke-width="1.2" opacity=".18">' + ''.join(
+  f'<path d="M-50 {120+i*42} C 300 {60+i*42}, 900 {200+i*42}, 1250 {110+i*42}"/>' for i in range(11)) + '</g></svg>'
+CONTACT = 'conseil@favereaukevin.fr'
+MAIL = f'mailto:{CONTACT}?subject=Demande%20d%27acc%C3%A8s%20%C3%A0%20Sillon'
+
+def page(titre, desc, corps):
+    return f'''<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titre}</title>
+  <meta name="description" content="{desc}" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#f7f8f6" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="entete">
+    <div class="bloc">
+      <a class="logo" href="index.html">{LOGO}Sillon</a>
+      <nav class="nav" aria-label="Navigation">
+        <a href="index.html#outils">Les outils</a>
+        <a href="index.html#veille">Veille</a>
+        <a href="index.html#donnees">Données</a>
+        <a href="index.html#faq">Questions</a>
+      </nav>
+      <a class="btn" href="{MAIL}">Demander l’accès</a>
+    </div>
+  </header>
+{corps}
+  <footer class="pied">
+    <div class="bloc">
+      <span>© 2026 Sillon — édité par Kevin Favereau</span>
+      <nav>
+        <a href="{MAIL}">{CONTACT}</a>
+        <a href="mentions-legales.html">Mentions légales et confidentialité</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
+'''
+
+def alterne(etiq, titre, texte, puces, visuel):
+    lis = ''.join(f'<li>{p}</li>' for p in puces)
+    return f'''
+      <div class="alterne">
+        <div>
+          <p class="etiquette">{etiq}</p>
+          <h3>{titre}</h3>
+          <p>{texte}</p>
+          <ul class="puces">{lis}</ul>
+        </div>
+        <div class="alterne-visuel">{visuel}</div>
+      </div>'''
+
+def carte(icone, titre, texte):
+    return f'''
+        <div class="carte"><div class="icone">{I[icone]}</div><h3>{titre}</h3><p>{texte}</p></div>'''
+
+def lignes(titre, paires, legende=''):
+    h = f'<div class="v-titre">{titre}</div>' + ''.join(f'<div class="v-ligne"><span>{a}</span><b{" class=ok" if ok else ""}>{b}</b></div>' for a, b, ok in paires)
+    return h + (f'<p class="m-legende" style="margin:10px 0 0">{legende}</p>' if legende else '')
+
+barres = ''.join(f'<span style="height:{h}%"></span>' for h in [62,58,55,52,49,46,43,40,36,33,30,27,20,18,16,14,12,10])
+
+V_IMMO = lignes('Même bien, quatre régimes', [('LMNP au réel','212 €/mois',0),('Location nue au réel','268 €/mois',0),('Jeanbrun','231 €/mois',0),('Micro-foncier','295 €/mois',0)], 'Effort d’épargne moyen pendant le crédit · données fictives')
+V_BUDGET = lignes('Relevé importé · 3 mois', [('Charges fixes','1 420 €',0),('Dépenses courantes','860 €',0),('Dépenses variables','390 €',0),('Capacité d’épargne','+ 530 €/mois',1)], 'Données fictives')
+V_OUTILS = '<div class="v-titre">Les outils</div><div class="v-pastilles"><span>Épargne immobilier</span><span>SCPI</span><span>Budget</span><span>Résidence principale</span><span>Une pierre deux coups</span><span>Synthèse du dossier</span></div>'
+V_DOSSIERS = lignes('Dossiers', [('M. et Mme Martin','3 simulations',0),('Mme Durand','1 simulation',0),('SARL Lefèvre — dirigeant','2 simulations',0),('Synthèse','PDF prêt',1)], 'Données fictives')
+V_MAIL = ('<div class="v-mail"><div class="v-mail-tete">Alerte veille<small>Paru hier au BOFiP · 1 actualité</small></div>'
+  '<div class="v-mail-corps"><div><span class="tag">À traiter</span><br><b>Dons familiaux : la doctrine précise la condition d’âge</b></div>'
+  '<div style="color:var(--doux)">Ce qui change, qui est concerné, que revoir chez vos clients — et le texte officiel.</div>'
+  '<div style="color:var(--libelle);font-size:12.5px">Exemple de mise en forme</div></div></div>')
+
+index = f'''  <main>
+    <section class="heros">
+      {SILLONS}
+      <div class="bloc">
+        <span class="surtitre monte">L’outil de rendez-vous des conseillers du réseau</span>
+        <h1 class="monte monte-2">Vos simulations clients, <span class="ble">prêtes en rendez-vous</span>.</h1>
+        <p class="chapo monte monte-2">
+          Sillon réunit les simulations dont un conseiller a besoin face à son client —
+          investissement immobilier, SCPI, budget, résidence principale — dans une seule
+          application. Vous saisissez la situation, Sillon chiffre chaque scénario année
+          après année. À vous, le conseil.
+        </p>
+        <div class="actions monte monte-3">
+          <a class="btn btn--grand" href="{MAIL}">Demander l’accès — gratuit pour le réseau</a>
+          <a class="btn btn--grand btn--fantome" href="#outils">Découvrir les outils</a>
+        </div>
+        <p class="petit monte monte-3">Mac, Windows ou simple navigateur. Vos données clients restent sur votre ordinateur.</p>
+        <div class="maquette monte monte-3" aria-hidden="true">
+          <div class="maquette-barre"><i></i><i></i><i></i><span>Sillon — Dossier M. et Mme Martin</span></div>
+          <div class="maquette-corps">
+            <div class="maquette-menu">
+              <span>Accueil</span><span>Budget</span><span class="actif">Épargne immobilier</span>
+              <span>SCPI</span><span>Résidence principale</span><span>Une pierre deux coups</span><span>Synthèse</span>
+            </div>
+            <div class="maquette-contenu">
+              <div class="maquette-titre">LMNP au réel · T2 à 185 000 €</div>
+              <div class="maquette-tuiles">
+                <div class="m-tuile m-tuile--sombre"><small>Effort d’épargne</small><b>212 €/mois</b></div>
+                <div class="m-tuile"><small>Patrimoine à 20 ans</small><b>247 800 €</b></div>
+                <div class="m-tuile"><small>Impôt sur les loyers</small><b>0 € an 1</b></div>
+              </div>
+              <div class="m-barres">{barres}</div>
+              <div class="m-legende">Effort d’épargne mensuel, année par année — pendant le crédit puis après · données fictives</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--blanche" id="outils">
+      <div class="bloc">
+        <div class="tete">
+          <p class="etiquette">Ce que Sillon fait pour vous</p>
+          <h2>Pas un tableur de plus. Des chiffres justes, en face du client.</h2>
+          <p>Chaque outil part d’une vraie question de rendez-vous et y répond en quelques minutes, avec les hypothèses affichées.</p>
+        </div>
+{alterne('Épargne immobilier', 'Comparez les régimes fiscaux sur le même bien, en direct.',
+  'LMNP, location nue, Denormandie, Jeanbrun : le même projet chiffré sous chaque régime, avec l’effort d’épargne, l’impôt et le patrimoine constitué, année après année.',
+  ['Micro ou réel, déficit foncier et amortissement gérés selon les règles 2026',
+   'Une SCPI à crédit en complément, intérêts déduits des revenus fonciers',
+   'Les paliers qui comptent : fin du crédit, fin de l’engagement, horizon choisi'], V_IMMO)}
+{alterne('Budget', 'Le budget du client, sans rien ressaisir.',
+  'Importez ses relevés bancaires : Sillon lit le fichier, classe les dépenses et fait ressortir ce qui reste chaque mois pour épargner.',
+  ['Fichiers CSV ou Excel, quelle que soit la banque',
+   'Dépenses classées en fixes, courantes, variables et ponctuelles',
+   'Les remboursements reconnus et écartés des revenus'], V_BUDGET)}
+{alterne('SCPI et résidence principale', 'Les projets du quotidien, chiffrés honnêtement.',
+  'Versement initial et versements programmés en SCPI, revenus perçus ou réinvestis ; achat de la résidence principale comparé au loyer actuel, avec un placement adossé si besoin.',
+  ['Capital, revenus et scénario de réinvestissement côte à côte',
+   'Coût du logement, surcoût face au loyer et effort d’épargne tenus séparés',
+   'PER, assurance-vie ou SCPI en complément, chacun avec sa vraie mécanique'], V_OUTILS)}
+{alterne('Synthèse et documents', 'Un dossier par client, une synthèse en un clic.',
+  'Chaque client a son dossier : les simulations y sont enregistrées et se retrouvent au rendez-vous suivant. La synthèse réunit tout, prête à imprimer ou à enregistrer en PDF.',
+  ['Plusieurs dossiers clients, retrouvés instantanément',
+   'Export PDF et version à remettre au client',
+   'Sauvegarde et transfert d’un dossier en un fichier'], V_DOSSIERS)}
+      </div>
+    </section>
+
+    <section class="section" id="veille">
+      <div class="bloc">
+{alterne('Veille juridique et fiscale', 'Ne ratez plus un changement de règle qui touche vos clients.',
+  'Chaque matin, le BOFiP, le Journal officiel et service-public sont passés en revue sur neuf thèmes — succession, assurance-vie, PER, immobilier, sociétés… Un courriel ne part que s’il y a du nouveau.',
+  ['Ce qui change, en clair, avec la référence et le lien officiel',
+   'Une priorité par actualité : à traiter, à noter, pour info',
+   'Une phrase simple et le lien, prêts à transmettre à un client'], V_MAIL)}
+      </div>
+    </section>
+
+    <section class="section section--blanche">
+      <div class="bloc">
+        <div class="tete">
+          <p class="etiquette">Le constat</p>
+          <h2>Vous connaissez vos clients. Vos tableurs, eux, vieillissent.</h2>
+        </div>
+        <div class="constat">
+          <div class="colonne">
+            <h3>Aujourd’hui</h3>
+            <ul>
+              <li>Des fichiers Excel bricolés, différents d’un conseiller à l’autre</li>
+              <li>Des calculs refaits à la main à chaque changement d’hypothèse</li>
+              <li>Des barèmes qui changent chaque année, sans que personne ne les mette à jour</li>
+            </ul>
+          </div>
+          <div class="colonne colonne--apres">
+            <h3>Avec Sillon</h3>
+            <ul>
+              <li>Les mêmes outils pour tout le réseau, sur Mac, Windows ou navigateur</li>
+              <li>Un scénario modifié, tous les chiffres recalculés instantanément</li>
+              <li>Des règles 2026 vérifiées à la source et des mises à jour automatiques</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="bloc">
+        <div class="tete">
+          <p class="etiquette">Fonctionnalités</p>
+          <h2>Pensé pour le quotidien d’un conseiller</h2>
+        </div>
+        <div class="grille">
+{carte('ecran', 'Mac, Windows et navigateur', 'Une application à installer, ou la même dans un simple navigateur, sans installation.')}
+{carte('maj', 'Mises à jour automatiques', 'Les nouvelles versions s’installent d’elles-mêmes : tout le réseau travaille sur les mêmes règles.')}
+{carte('bareme', 'Règles 2026 vérifiées', 'Barèmes, plafonds et dispositifs relevés sur le BOFiP et Légifrance, datés et sourcés.')}
+{carte('test', 'Calculs contrôlés', 'Plus de deux cents tests automatiques vérifient les moteurs de calcul à chaque version.')}
+{carte('dossier', 'Dossiers clients', 'Les simulations sont enregistrées par client et se retrouvent au rendez-vous suivant.')}
+{carte('pdf', 'PDF et version client', 'Une synthèse propre à imprimer, à enregistrer ou à remettre au client.')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--blanche" id="donnees">
+      <div class="bloc">
+        <div class="tete">
+          <p class="etiquette">Données et confidentialité</p>
+          <h2>Les données de vos clients ne quittent pas votre ordinateur.</h2>
+          <p>Sillon n’a ni serveur, ni base de données, ni compte à créer. C’est le plus simple des engagements de confidentialité.</p>
+        </div>
+        <div class="donnees">
+{carte('cadenas', 'Stockage local', 'Les dossiers sont enregistrés sur l’appareil où vous travaillez, et nulle part ailleurs.')}
+{carte('export', 'Vous gardez la main', 'Chaque dossier s’exporte en un fichier : sauvegarde, changement d’ordinateur ou archivage.')}
+{carte('maison', 'Sans sous-traitant', 'Aucune donnée client n’est confiée à Sillon : vous restez seul responsable de leur traitement.')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="acces">
+      <div class="bloc">
+        <div class="tete">
+          <p class="etiquette">Accès</p>
+          <h2>Offert aux conseillers du réseau</h2>
+        </div>
+        <div class="acces">
+          <div class="acces-gauche">
+            <p class="etiquette" style="margin:0">Conseillers du réseau</p>
+            <div class="prix">Gratuit</div>
+            <p>Sur simple demande. Vous recevez le lien d’installation et la version navigateur.</p>
+            <a class="btn btn--grand" href="{MAIL}" style="width:100%">Demander l’accès</a>
+          </div>
+          <div class="acces-droite">
+            <ul class="puces">
+              <li>Les cinq outils de simulation et la synthèse</li>
+              <li>Dossiers clients illimités</li>
+              <li>Application Mac et Windows, et version navigateur</li>
+              <li>Mises à jour automatiques</li>
+              <li>Veille juridique et fiscale par courriel, sur demande</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--blanche" id="faq">
+      <div class="bloc">
+        <div class="tete">
+          <p class="etiquette">Questions fréquentes</p>
+          <h2>Vous avez des questions ? Voici les réponses.</h2>
+        </div>
+        <div class="faq">
+          <details><summary>Est-ce vraiment gratuit ?</summary><p>Oui, pour les conseillers du réseau. Il n’y a ni abonnement, ni carte bancaire, ni engagement : il suffit d’en faire la demande.</p></details>
+          <details><summary>Faut-il installer quelque chose ?</summary><p>Non, ce n’est pas obligatoire : Sillon fonctionne aussi dans un simple navigateur. Une application Mac et Windows est disponible pour ceux qui préfèrent ; à la première ouverture, le système peut afficher un avertissement de sécurité, et la procédure pour le passer est fournie avec le lien.</p></details>
+          <details><summary>Où sont stockées les données de mes clients ?</summary><p>Uniquement sur votre appareil. Sillon n’envoie aucune donnée client sur internet. Pensez donc à exporter vos dossiers pour les sauvegarder, ou pour les retrouver sur un autre ordinateur.</p></details>
+          <details><summary>Les règles fiscales sont-elles à jour ?</summary><p>Les barèmes, plafonds et dispositifs sont ceux de 2026, vérifiés sur le BOFiP et Légifrance. Quand une règle change, l’outil est corrigé et la mise à jour arrive automatiquement.</p></details>
+          <details><summary>Puis-je montrer les simulations à mes clients ?</summary><p>Oui, c’est leur raison d’être, et une version client est prévue pour le PDF. Les simulations restent des projections fondées sur des hypothèses : elles appuient votre conseil, elles ne le remplacent pas.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloc" style="margin-top:70px">
+      <div class="final">
+        {SILLONS}
+        <h2>Prêt à gagner du temps en rendez-vous ?</h2>
+        <p>Gratuit pour les conseillers du réseau, sur simple demande.</p>
+        <div class="actions"><a class="btn btn--grand btn--ble" href="{MAIL}">Demander l’accès</a></div>
+      </div>
+    </section>
+  </main>
+'''
+
+mentions = f'''  <main class="texte">
+    <h1>Mentions légales</h1>
+    <h2>Éditeur</h2>
+    <p>Kevin Favereau, entrepreneur individuel — RCS Montauban 920 478 518<br />14 chemin du Magnolia, 82700 Montech<br />Téléphone : 06 74 16 09 01 · Courriel : <a href="mailto:{CONTACT}">{CONTACT}</a><br />TVA non applicable, article 293 B du CGI. Directeur de la publication : Kevin Favereau.</p>
+    <h2>Hébergement</h2>
+    <p>GitHub, Inc. — 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis — <a href="https://support.github.com" rel="noopener">support.github.com</a>.</p>
+    <h2>Confidentialité</h2>
+    <p>Cette page ne dépose aucun cookie et ne comporte ni formulaire ni outil de mesure d’audience. Les polices de caractères sont chargées depuis Google Fonts, ce qui transmet votre adresse IP à Google.</p>
+    <p>L’application Sillon n’a ni serveur ni base de données : les données saisies restent sur l’appareil de l’utilisateur, qui demeure seul responsable de leur traitement.</p>
+    <h2>Portée des simulations</h2>
+    <p>Sillon est un outil d’aide à la simulation destiné aux professionnels. Ses résultats sont des projections fondées sur des hypothèses ; ils ne constituent pas un conseil personnalisé et n’engagent pas l’éditeur. Les chiffres figurant sur cette page sont des exemples fictifs.</p>
+  </main>
+'''
+
+open('index.html', 'w').write(page('Sillon · L’outil de rendez-vous des conseillers en patrimoine',
+  'Sillon réunit les simulations patrimoniales d’un rendez-vous client : investissement immobilier, SCPI, budget, résidence principale. Gratuit pour les conseillers du réseau.', index))
+open('mentions-legales.html', 'w').write(page('Mentions légales · Sillon', 'Mentions légales et confidentialité de Sillon.', mentions))
+print('ok')
