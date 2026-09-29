@@ -95,6 +95,7 @@ V_CAL = ('<div class="v-titre">Calendrier fiscal · tous les clients</div>'
   '<div class="v-ligne"><span>8 ans de l’assurance-vie <small style="color:var(--libelle)">— Mme Durand</small></span><b>15 janv.</b></div>'
   '<div class="v-ligne"><span>70 ans : régime de l’assurance-vie <small style="color:var(--libelle)">— M. Martin</small></span><b>12 mars</b></div>'
   '<p class="m-legende" style="margin:10px 0 0">Données fictives</p>')
+V_CABINET = lignes('Tableau de bord', [('Vus depuis le 1er janvier','38 / 52',0),('À relancer','9 clients',0),('Fiches à compléter','6',0),('Nouvelles sociétés du département','50 ce mois-ci',1)], 'Données fictives')
 V_MAIL = ('<div class="v-mail"><div class="v-mail-tete">Alerte veille<small>Paru hier au BOFiP · 1 actualité</small></div>'
   '<div class="v-mail-corps"><div><span class="tag">À traiter</span><br><b>Dons familiaux : la doctrine précise la condition d’âge</b></div>'
   '<div style="color:var(--doux)">Ce qui change, qui est concerné, que revoir chez vos clients — et le texte officiel.</div>'
@@ -166,10 +167,15 @@ index = f'''  <main>
   ['8 ans d’une assurance-vie, 70 et 80 ans, versement PER avant le 31 décembre',
    'Fin d’un engagement Pinel ou Jeanbrun, fin d’un crédit, livret au plafond',
    'Majorité des enfants, abattement reconstitué 15 ans après une donation'], V_CAL)}
+{alterne('Tableau de bord et prospection', 'Votre cabinet, pas seulement vos rendez-vous.',
+  'Un tableau de bord dit qui a été vu cette année et qui relancer ; la prospection repère au BODACC les sociétés qui viennent de se créer dans votre département ; l’import reprend votre base clients existante.',
+  ['Clients vus depuis le 1er janvier, clients à relancer, fiches à compléter',
+   'Créations de sociétés et modifications de capital, dossier prospect en un clic',
+   'Import CSV ou Excel : un dossier et une fiche par client, après un aperçu'], V_CABINET)}
 {alterne('Synthèse et documents', 'Un dossier par client, une synthèse en un clic.',
   'Chaque client a son dossier : les simulations y sont enregistrées et se retrouvent au rendez-vous suivant. La synthèse réunit tout, prête à imprimer ou à enregistrer en PDF.',
   ['Plusieurs dossiers clients, retrouvés instantanément',
-   'Export PDF et version à remettre au client',
+   'Export PDF et présentation PowerPoint prête à projeter',
    'Sauvegarde et transfert d’un dossier en un fichier'], V_DOSSIERS)}
       </div>
     </section>
@@ -224,7 +230,7 @@ index = f'''  <main>
 {carte('test', 'Calculs contrôlés', 'Plus de deux cents tests automatiques vérifient les moteurs de calcul à chaque version.')}
 {carte('dossier', 'Fiche et arbre familial', 'Identité, famille recomposée, contrats, biens, donations : le client sur une page, patrimoine net compris.')}
 {carte('calendrier', 'Calendrier fiscal', 'Onze échéances surveillées automatiquement pour chaque client, datées et sourcées.')}
-{carte('pdf', 'PDF et version client', 'Une synthèse propre à imprimer, à enregistrer ou à remettre au client.')}
+{carte('pdf', 'PDF et PowerPoint', 'Une synthèse à imprimer, et une présentation PowerPoint du bilan patrimonial générée en un clic.')}
         </div>
       </div>
     </section>
@@ -260,7 +266,8 @@ index = f'''  <main>
           <div class="acces-droite">
             <ul class="puces">
               <li>Les cinq outils de simulation et la synthèse</li>
-              <li>Fiche client et calendrier fiscal</li>
+              <li>Fiche client, calendrier fiscal et tableau de bord</li>
+              <li>Prospection BODACC et import de votre base clients</li>
               <li>Dossiers clients illimités</li>
               <li>Application Mac et Windows, et version navigateur</li>
               <li>Mises à jour automatiques</li>
@@ -280,7 +287,7 @@ index = f'''  <main>
         <div class="faq">
           <details><summary>Est-ce vraiment gratuit ?</summary><p>Oui, pour les conseillers du réseau. Il n’y a ni abonnement, ni carte bancaire, ni engagement : il suffit d’en faire la demande.</p></details>
           <details><summary>Faut-il installer quelque chose ?</summary><p>Non, ce n’est pas obligatoire : Sillon fonctionne aussi dans un simple navigateur. Une application Mac et Windows est disponible pour ceux qui préfèrent ; à la première ouverture, le système peut afficher un avertissement de sécurité, et la procédure pour le passer est fournie avec le lien.</p></details>
-          <details><summary>Où sont stockées les données de mes clients ?</summary><p>Uniquement sur votre appareil. Sillon n’envoie aucune donnée client sur internet. Pensez donc à exporter vos dossiers pour les sauvegarder, ou pour les retrouver sur un autre ordinateur.</p></details>
+          <details><summary>Où sont stockées les données de mes clients ?</summary><p>Uniquement sur votre appareil. Sillon n’envoie aucune donnée client sur internet : la seule requête en ligne est celle de la prospection, qui interroge le BODACC avec un département et une période. Pensez à exporter vos dossiers pour les sauvegarder, ou pour les retrouver sur un autre ordinateur.</p></details>
           <details><summary>Les règles fiscales sont-elles à jour ?</summary><p>Les barèmes, plafonds et dispositifs sont ceux de 2026, vérifiés sur le BOFiP et Légifrance. Quand une règle change, l’outil est corrigé et la mise à jour arrive automatiquement.</p></details>
           <details><summary>Puis-je montrer les simulations à mes clients ?</summary><p>Oui, c’est leur raison d’être, et une version client est prévue pour le PDF. Les simulations restent des projections fondées sur des hypothèses : elles appuient votre conseil, elles ne le remplacent pas.</p></details>
         </div>
