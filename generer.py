@@ -156,7 +156,8 @@ index = f'''  <main>
   'Importez ses relevés bancaires : Sillon lit le fichier, classe les dépenses et fait ressortir ce qui reste chaque mois pour épargner.',
   ['Fichiers CSV ou Excel, quelle que soit la banque',
    'Dépenses classées en fixes, courantes, variables et ponctuelles',
-   'Les remboursements reconnus et écartés des revenus'], V_BUDGET)}
+   'Les remboursements reconnus et écartés des revenus',
+   'À donner au client : <a href="https://favereaukevin-creator.github.io/mon-budget/" target="_blank" rel="noopener" style="color:var(--petrole);font-weight:700">Mon budget</a>, pour suivre lui-même son budget mois après mois — relevés CSV, Excel, OFX ou PDF, rien ne quitte son navigateur'], V_BUDGET)}
 {alterne('SCPI et résidence principale', 'Les projets du quotidien, chiffrés honnêtement.',
   'Versement initial et versements programmés en SCPI, revenus perçus ou réinvestis ; achat de la résidence principale comparé au loyer actuel, avec un placement adossé si besoin.',
   ['Capital, revenus et scénario de réinvestissement côte à côte',
